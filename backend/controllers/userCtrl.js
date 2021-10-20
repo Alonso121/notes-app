@@ -26,8 +26,10 @@ const userCtrl = {
         password: passwordHash,
       });
       await newUser.save();
-    } catch (error) {}
-    return res.status(500).json({ msg: error.message });
+      res.json({ msg: "Registered successfully!" });
+    } catch (error) {
+      return res.json({ msg: error.message });
+    }
   },
 };
 

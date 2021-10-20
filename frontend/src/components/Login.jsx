@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Login() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-purple-400">
+    <div className="relative flex items-center justify-center min-h-screen overflow-hidden bg-purple-400">
       <div className="absolute z-0 hidden transform rotate-45 bg-purple-300 w-60 h-60 rounded-xl -top-5 -left-16 md:block"></div>
       <div className="absolute hidden w-48 h-48 transform bg-purple-300 rounded-xl -bottom-6 -right-10 rotate-12 md:block"></div>
       <div className="z-20 px-12 py-12 bg-white shadow-xl rounded-2xl">
@@ -32,7 +32,7 @@ function Login() {
           </button>
           <p className="mt-4 text-sm">
             Don't Have An Account?{" "}
-            <Link to="/signin">
+            <Link to="/register">
               <span className="font-semibold text-purple-700 underline cursor-pointer hover:text-purple-500">
                 {" "}
                 Register
