@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { IoWarningOutline } from "react-icons/io5";
 
 import { loginUser } from "../slices/users";
+import Spinner from "../components/Spinner";
 
 function Login(props) {
   const dispatch = useDispatch();
@@ -76,9 +77,14 @@ function Login(props) {
         <div className="mt-6 text-center">
           <button
             type="submit"
-            className="w-64 py-3 text-xl text-white transition-colors duration-200 bg-purple-500 hover:bg-purple-600 rounded-2xl"
+            className="relative w-64 py-3 text-xl text-white transition-colors duration-200 bg-purple-500 hover:bg-purple-600 rounded-2xl"
           >
             Login
+            {isLoading && (
+              <span className="absolute top-4 right-20">
+                <Spinner />
+              </span>
+            )}
           </button>
           <p className="mt-4 text-sm">
             Don't Have An Account?{" "}
