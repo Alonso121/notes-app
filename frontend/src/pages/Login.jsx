@@ -1,38 +1,41 @@
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { IoWarningOutline } from "react-icons/io5";
 
-import { registerUser } from "../slices/users";
+import { loginUser } from "../slices/users";
 
-function Register() {
-  const history = useHistory();
+function Login(props) {
   const dispatch = useDispatch();
   const initialState = {
-    username: "",
     email: "",
     password: "",
   };
-  const [newUser, setNewUser] = useState(initialState);
+
+  const [user, setUser] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
   const [displayInfo, setDisplayInfo] = useState("");
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    setNewUser({ ...newUser, [name]: value });
+    setUser({ ...user, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    if (displayInfo) setDisplayInfo("");
+  const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(registerUser(newUser))
+
+    setIsLoading(true);
+
+    if (displayInfo) setDisplayInfo("");
+
+    dispatch(loginUser(user))
       .unwrap()
       .then((data) => {
-        if (data) {
-          history.push("/login");
-        }
+        if (data) props.history.push("/");
       })
       .catch((error) => {
-        return setDisplayInfo(error.msg);
+        setIsLoading(false);
+        setDisplayInfo(error.msg);
       });
   };
 
@@ -41,33 +44,24 @@ function Register() {
       <div className="absolute z-0 hidden transform rotate-45 bg-purple-300 w-60 h-60 rounded-xl -top-5 -left-16 md:block"></div>
       <div className="absolute hidden w-48 h-48 transform bg-purple-300 rounded-xl -bottom-6 -right-10 rotate-12 md:block"></div>
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
         className="relative z-20 px-8 py-12 bg-white shadow-xl sm:px-12 rounded-2xl"
       >
         <div>
           <h1 className="mb-4 text-3xl font-bold text-center cursor-pointer">
-            Create An Account
+            Login to Notes
           </h1>
           <p className="mb-8 text-sm font-semibold tracking-wide text-center text-gray-700 cursor-pointer w-80">
-            Create an account to enjoy all the services without any ads for
-            free!
+            Get access to your favourite notes editor!
           </p>
         </div>
         <div className="space-y-4">
           <input
-            type="text"
-            placeholder="Username"
-            className="block w-full px-4 py-3 text-sm border-4 border-double rounded-lg outline-none focus:border-purple-800"
-            name="username"
-            value={newUser.username}
-            onChange={onChangeInput}
-          />
-          <input
-            type="text"
+            type="email"
             placeholder="Email Address"
             className="block w-full px-4 py-3 text-sm border-4 border-double rounded-lg outline-none focus:border-purple-800"
             name="email"
-            value={newUser.email}
+            value={user.email}
             onChange={onChangeInput}
           />
           <input
@@ -75,7 +69,7 @@ function Register() {
             placeholder="Password"
             className="block w-full px-4 py-3 text-sm border-4 border-double rounded-lg outline-none focus:border-purple-800"
             name="password"
-            value={newUser.password}
+            value={user.password}
             onChange={onChangeInput}
           />
         </div>
@@ -84,14 +78,14 @@ function Register() {
             type="submit"
             className="w-64 py-3 text-xl text-white transition-colors duration-200 bg-purple-500 hover:bg-purple-600 rounded-2xl"
           >
-            Create Account
+            Login
           </button>
           <p className="mt-4 text-sm">
-            Already Have An Account?{" "}
-            <Link to="/login">
+            Don't Have An Account?{" "}
+            <Link to="/register">
               <span className="font-semibold text-purple-700 underline cursor-pointer hover:text-purple-500">
                 {" "}
-                Login
+                Register
               </span>
             </Link>
           </p>
@@ -111,4 +105,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;
