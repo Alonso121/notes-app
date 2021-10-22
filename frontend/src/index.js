@@ -1,18 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import "./index.tailwind.css";
 
 import App from "./App";
-import store from "./store";
+import store from "./redux/store";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <Router>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

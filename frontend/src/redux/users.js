@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AuthDataService from "../services/auth.service";
 
-const initialState = { message: "" };
+const initialState = {};
 
 export const registerUser = createAsyncThunk(
   "auth/register",
@@ -44,7 +44,11 @@ const authSlice = createSlice({
       return { ...state, message: action.payload.msg };
     },
     [loginUser.fulfilled]: (state, action) => {
-      return { ...state, username: action.payload.username };
+      return {
+        ...state,
+        username: action.payload.username,
+        token: action.payload.token,
+      };
     },
     [loginUser.rejected]: (state, action) => {
       return { ...state, message: action.payload.msg };

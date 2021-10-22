@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { IoWarningOutline } from "react-icons/io5";
 
-import { loginUser } from "../slices/users";
+import { loginUser } from "../redux/users";
 import Spinner from "../components/Spinner";
 
 function Login(props) {

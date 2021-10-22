@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { IoWarningOutline } from "react-icons/io5";
 
-import { registerUser } from "../slices/users";
+import { registerUser } from "../redux/users";
 
 function Register(props) {
   const dispatch = useDispatch();
