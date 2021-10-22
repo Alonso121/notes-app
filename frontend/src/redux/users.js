@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AuthDataService from "../services/auth.service";
 
-const initialState = {};
+const initialState = { isLoggedIn: false, message: "", username: "" };
 
 export const registerUser = createAsyncThunk(
   "auth/register",
@@ -22,7 +22,6 @@ export const loginUser = createAsyncThunk(
       const res = await AuthDataService.login({ email, password });
       if (res.data) {
         localStorage.setItem("accessToken", res.data.token);
-        localStorage.setItem("user", res.data.username);
         return res.data;
       }
       return;
@@ -32,26 +31,42 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const verifyToken = createAsyncThunk("auth/verify", async (token) => {
+  try {
+    const res = await AuthDataService.verifyToken(token);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {},
   extraReducers: {
-    [registerUser.fulfilled]: (state, action) => {
-      return { ...state, message: action.payload };
+    [registerUser.fulfilled]: (state, { payload }) => {
+      return { ...state, message: payload };
     },
-    [registerUser.rejected]: (state, action) => {
-      return { ...state, message: action.payload.msg };
+    [registerUser.rejected]: (state, { payload }) => {
+      return { ...state, message: payload.msg };
     },
-    [loginUser.fulfilled]: (state, action) => {
+    [loginUser.fulfilled]: (state, { payload }) => {
       return {
         ...state,
-        username: action.payload.username,
-        token: action.payload.token,
+        username: payload.username,
+        isLoggedIn: payload.loggedIn,
       };
     },
-    [loginUser.rejected]: (state, action) => {
-      return { ...state, message: action.payload.msg };
+    [loginUser.rejected]: (state, { payload }) => {
+      return { ...state, message: payload.msg };
+    },
+    [verifyToken.fulfilled]: (state, { payload }) => {
+      return {
+        ...state,
+        isLoggedIn: payload.loggedIn,
+        username: payload.username,
+      };
     },
   },
 });

@@ -1,26 +1,43 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Switch, Route, useHistory } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Register from "./pages/Register";
+import { verifyToken } from "./redux/users";
 
 function App(props) {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  console.log(isLoggedIn);
   const history = useHistory();
-  const [token, setToken] = useState("");
+  const dispatch = useDispatch();
+  const accessToken = localStorage.accessToken;
+
   useEffect(() => {
-    const accessToken = localStorage.accessToken;
-    if (!accessToken) return history.push("/login");
-    setToken(accessToken);
-  }, [history]);
-  console.log(token);
+    const checkLogin = async () => {
+      if (accessToken) {
+        const verified = await dispatch(verifyToken(accessToken)).unwrap();
+        if (!verified.loggedIn) {
+          localStorage.removeItem(accessToken);
+          history.push("/login");
+          return;
+        }
+      } else {
+        history.push("/login");
+      }
+    };
+    checkLogin();
+  }, [history, dispatch, accessToken]);
+  console.log(accessToken);
+
   return (
     <>
       <Navbar />
       <Switch>
         <Route exact path="/">
-          {token && <Home accessToken={token} />}
+          {accessToken && isLoggedIn && <Home accessToken={accessToken} />}
         </Route>
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />

@@ -56,9 +56,26 @@ const userCtrl = {
       const token = jwt.sign(payload, process.env.TOKEN_SECRET, {
         expiresIn: "1d",
       });
-      res.json({ token, username: user.username });
+      res.json({ token, username: user.username, loggedIn: true });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
+    }
+  },
+  verifyToken: (req, res) => {
+    try {
+      const token = req.header("Authorization");
+      if (!token) return res.json({ loggedIn: false });
+
+      jwt.verify(token, process.env.TOKEN_SECRET, async (err, verified) => {
+        if (err) return res.json({ loggedIn: false });
+
+        const user = await Users.findById(verified.id);
+        if (!user) return res.json({ loggedIn: false });
+
+        return res.json({ loggedIn: true, username: user.username });
+      });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
     }
   },
 };
