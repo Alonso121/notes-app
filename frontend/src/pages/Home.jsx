@@ -14,14 +14,12 @@ function Home() {
   const dispatch = useDispatch();
   const accessToken = localStorage.accessToken;
   const notes = useSelector((state) => state.notes);
-  console.log(notes);
   const [toggleNewNote, setToggleNewNote] = useState(false);
   const [toggleUserModal, setToggleUserModal] = useState(false);
 
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        console.log("I rendered!!!");
         await dispatch(getNotes(accessToken));
       } catch (error) {
         console.log(error);

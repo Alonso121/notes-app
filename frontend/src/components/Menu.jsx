@@ -8,7 +8,6 @@ import Logout from "./Logout";
 function Menu({ setToggleUserModal, toggleUserModal }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const userName = useSelector((state) => state.user.username);
-  console.log(userName);
   return (
     <nav className="z-50 fixed w-full max-w-4xl  flex justify-between items-center px-4 py-2 bg-purple-600">
       <h1 className="text-2xl font-semibold text-white ">My Notes</h1>
