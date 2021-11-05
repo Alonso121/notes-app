@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Switch, Route, useHistory } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Navbar from "./components/Navbar";
 import Register from "./pages/Register";
 import { verifyToken } from "./redux/users";
 
-function App(props) {
+function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  console.log(isLoggedIn);
   const history = useHistory();
   const dispatch = useDispatch();
   const accessToken = localStorage.accessToken;
@@ -30,14 +28,12 @@ function App(props) {
     };
     checkLogin();
   }, [history, dispatch, accessToken]);
-  console.log(accessToken);
 
   return (
     <>
-      <Navbar />
       <Switch>
         <Route exact path="/">
-          {accessToken && isLoggedIn && <Home accessToken={accessToken} />}
+          {isLoggedIn && <Home />}
         </Route>
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />

@@ -10,7 +10,7 @@ const noteSchema = new mongoose.Schema(
       type: Date,
     },
     starred: {
-      type: String,
+      type: Boolean,
       required: true,
     },
     user_id: {
@@ -18,7 +18,7 @@ const noteSchema = new mongoose.Schema(
       required: true,
     },
     complete: {
-      type: String,
+      type: Boolean,
       required: true,
     },
   },

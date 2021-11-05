@@ -1,4 +1,5 @@
 const Users = require("../models/userModel");
+const Notes = require("../models/noteModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -22,6 +23,7 @@ const userCtrl = {
           msg: "There is already a user with that email. Please proceed to login.",
         });
 
+      // Create new user
       const passwordHash = await bcrypt.hash(password, 10);
       const newUser = new Users({
         username,
@@ -30,8 +32,8 @@ const userCtrl = {
       });
       await newUser.save();
       res.json({ msg: "Registered successfully!" });
-    } catch (error) {
-      return res.json({ msg: error.message });
+    } catch (e) {
+      return res.json({ msg: e.message });
     }
   },
   loginUser: async (req, res) => {
@@ -57,10 +59,26 @@ const userCtrl = {
         expiresIn: "1d",
       });
       res.json({ token, username: user.username, loggedIn: true });
-    } catch (error) {
-      return res.status(500).json({ msg: error.message });
+    } catch (e) {
+      return res.status(500).json({ msg: e.message });
     }
   },
+  deleteUser: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      console.log(userId);
+      // Delete user notes first
+      await Notes.deleteMany({ user_id: userId });
+      // Delete user
+      await Users.findByIdAndDelete({
+        _id: userId,
+      });
+      return res.status(200).json({ msg: "Deleted Successfully!" });
+    } catch (e) {
+      return res.status(500).json({ msg: e.message });
+    }
+  },
+  // verify token when reloading frontend
   verifyToken: (req, res) => {
     try {
       const token = req.header("Authorization");

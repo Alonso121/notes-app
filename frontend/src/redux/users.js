@@ -1,7 +1,12 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AuthDataService from "../services/auth.service";
 
-const initialState = { isLoggedIn: false, message: "", username: "" };
+const initialState = {
+  isLoggedIn: false,
+  message: "",
+  userId: "",
+  username: "",
+};
 
 export const registerUser = createAsyncThunk(
   "auth/register",
@@ -31,6 +36,15 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const deleteUser = createAsyncThunk("auth/deleteUser", async (token) => {
+  try {
+    const res = await AuthDataService.deleteUser(token);
+    if (res.status === 200) localStorage.removeItem("accessToken");
+  } catch (e) {
+    console.log(e.message);
+  }
+});
+
 export const verifyToken = createAsyncThunk("auth/verify", async (token) => {
   try {
     const res = await AuthDataService.verifyToken(token);
@@ -39,6 +53,8 @@ export const verifyToken = createAsyncThunk("auth/verify", async (token) => {
     console.log(error);
   }
 });
+
+export const logout = createAction('auth/logout')
 
 const authSlice = createSlice({
   name: "auth",
@@ -67,6 +83,9 @@ const authSlice = createSlice({
         isLoggedIn: payload.loggedIn,
         username: payload.username,
       };
+    },
+    [deleteUser.fulfilled]: (state, action) => {
+      return (state = initialState);
     },
   },
 });

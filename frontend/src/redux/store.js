@@ -1,14 +1,22 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./users";
 import notesReducer from "./notes";
 
-const reducer = {
+
+
+const combinedReducer = combineReducers({
   user: authReducer,
-  notes: notesReducer,
+  notes: notesReducer
+})
+
+const rootReducer = (state, action) => {
+  if (action.type === 'auth/logout') {
+    state = undefined;
+  }
+  return combinedReducer(state, action);
 };
 
 const store = configureStore({
-  reducer: reducer,
-  devTools: true,
+  reducer: rootReducer,
 });
 export default store;

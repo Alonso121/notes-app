@@ -12,6 +12,11 @@ class AuthDataService {
       headers: { Authorization: token },
     });
   }
+  deleteUser(token) {
+    return http.delete("/users/delete", {
+      headers: { Authorization: token },
+    });
+  }
 }
 
 export default new AuthDataService();

@@ -1,17 +1,28 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { IoAdd } from "react-icons/io5";
+
+import DeleteUserModal from "../components/DeleteUserModal";
+import Menu from "../components/Menu";
+import Note from "../components/Note";
+import Layout from "../components/Layout";
+import CreateNote from "../components/CreateNote";
 
 import { getNotes } from "../redux/notes";
 
-function Home({ accessToken }) {
+function Home() {
   const dispatch = useDispatch();
-  const [notes, setNotes] = useState([]);
+  const accessToken = localStorage.accessToken;
+  const notes = useSelector((state) => state.notes);
+  console.log(notes);
+  const [toggleNewNote, setToggleNewNote] = useState(false);
+  const [toggleUserModal, setToggleUserModal] = useState(false);
 
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const data = await dispatch(getNotes(accessToken)).unwrap();
-        setNotes(data);
+        console.log("I rendered!!!");
+        await dispatch(getNotes(accessToken));
       } catch (error) {
         console.log(error);
       }
@@ -19,13 +30,39 @@ function Home({ accessToken }) {
     fetchNotes();
   }, [dispatch, accessToken]);
 
-  if (notes.length < 1)
-    return <div className="text-green-900">"Loading ..."</div>;
-
   return (
-    <div className="text-3xl text-blue-800">
-      <button>Set Token</button>
-    </div>
+    <Layout>
+      <div className="max-w-4xl w-full pb-4 relative bg-red-500">
+        <Menu
+          setToggleUserModal={setToggleUserModal}
+          toggleUserModal={toggleUserModal}
+        />
+        <div className="h-16"></div>
+        {toggleUserModal && (
+          <DeleteUserModal
+            token={accessToken}
+            setToggleUserModal={setToggleUserModal}
+          />
+        )}
+        {toggleNewNote && (
+          <CreateNote setToggleNewNote={setToggleNewNote} token={accessToken} />
+        )}
+        {/* Notes list */}
+        <div className="relative z-10 mx-auto px-4 mt-4">
+          {notes.map((note) => (
+            <Note key={note._id} note={note} token={accessToken} />
+          ))}
+        </div>
+        {/* Add new note button */}
+        <button
+          onClick={() => setToggleNewNote(!toggleNewNote)}
+          className="fixed border border-gray-300 md:absolute z-40 bottom-12 right-14  flex items-center justify-center w-12 h-12 ml-2 text-2xl text-white bg-purple-600 rounded-full hover:bg-purple-700"
+          aria-label="Add new note"
+        >
+          <IoAdd />
+        </button>
+      </div>
+    </Layout>
   );
 }
 
