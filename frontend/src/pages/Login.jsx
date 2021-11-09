@@ -52,7 +52,7 @@ function Login(props) {
             Login to Notes
           </h1>
           <p className="mb-8 text-sm font-semibold tracking-wide text-center text-gray-700 cursor-pointer w-80">
-            Get access to your favourite notes editor!
+            Login to your favourite notes editor!
           </p>
         </div>
         <div className="space-y-4">

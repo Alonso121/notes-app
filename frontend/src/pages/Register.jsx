@@ -46,6 +46,9 @@ function Register(props) {
           <h1 className="mb-4 text-3xl font-bold text-center cursor-pointer">
             Create An Account
           </h1>
+          <p className="mb-8 text-sm font-semibold tracking-wide text-center text-gray-700 cursor-pointer w-80">
+            Register to your favourite notes editor!
+          </p>
         </div>
         <div className="space-y-4">
           <input
