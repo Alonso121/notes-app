@@ -39,7 +39,7 @@ function CreateNote({ setToggleNewNote, token }) {
   return (
     <form
       onSubmit={handleCreateNote}
-      className="z-50 px-8 mx-4 py-10 bg-white opacity-95 shadow-xl sm:px-12 rounded-b-2xl"
+      className="z-50 px-8 py-10 bg-white opacity-95 shadow-xl sm:px-12 rounded-b-2xl"
     >
       <h1 className="mb-4 text-3xl font-bold text-center cursor-pointer text-purple-700">
         Create new Note

@@ -7,7 +7,7 @@ import StarNote from "./StarNote";
 
 const Note = ({ note, token }) => {
   return (
-    <div className="flex items-center justify-between mb-1 border-2 bg-white bg-opacity-60 rounded-lg">
+    <div className="flex items-center justify-between mb-1 border-2 bg-gray-200  rounded-lg">
       <CheckBox complete={note.complete} id={note._id} token={token} />
       <div className="flex-1 font-semibold text-purple-900">
         <h2 className={note.complete ? "line-through" : "text-secondary"}>
