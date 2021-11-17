@@ -81,7 +81,7 @@ function Login(props) {
             Login
             {isLoading && (
               <span className="absolute top-4 right-20">
-                <Spinner />
+                <Spinner height={5} width={5} />
               </span>
             )}
           </button>

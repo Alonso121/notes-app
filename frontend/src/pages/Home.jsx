@@ -10,6 +10,7 @@ import CreateNote from "../components/CreateNote";
 import { getNotes } from "../redux/notes";
 import Instructions from "../components/Instructions";
 import AddNoteBtn from "../components/AddNoteBtn";
+import Spinner from "../components/Spinner";
 
 function Home() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ function Home() {
   const stateNotes = useSelector((state) => state.notes);
   const [toggleNewNote, setToggleNewNote] = useState(false);
   const [toggleUserModal, setToggleUserModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
 
   const notes = [...stateNotes]
 
@@ -24,6 +26,7 @@ function Home() {
     const fetchNotes = async () => {
       try {
         await dispatch(getNotes(accessToken));
+        await setIsLoading(false)
       } catch (error) {
         console.log(error);
       }
@@ -39,7 +42,8 @@ function Home() {
           toggleUserModal={toggleUserModal}
         />
         {/* Filler div for nav since position fixed */}
-        <div className="h-16"></div>
+        {isLoading ? (<div className="mt-28 flex items-center justify-center"><Spinner isLarge={true} ><p className="text-white">Loading...</p></Spinner></div>) : 
+        <div className="mt-20">
         {/* Delete user modal */}
         {toggleUserModal && (
           <DeleteUserModal
@@ -61,6 +65,7 @@ function Home() {
         </div>
         {/* Add new note button */}
         <AddNoteBtn setToggleNewNote={setToggleNewNote} toggleNewNote={toggleNewNote} />
+      </div>}
       </div>
     </Layout>
   );
